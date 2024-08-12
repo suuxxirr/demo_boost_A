@@ -7,7 +7,7 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js"
+    "dev": "nodemon boostBackend/app.js",
+    "start": "node boostBackend/app.js"
   }
 }
