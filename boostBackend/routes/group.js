@@ -15,7 +15,7 @@ groupRouter.route('/')
 
     const passworRecord = await prisma.password.create({
       data: {
-        groupId: group.id, // 그룹 id 가져오기 
+        groupId: group.id,  
         password: password,
       },
     })
@@ -25,6 +25,33 @@ groupRouter.route('/')
     } else {
       res.status(400).send({ message: "잘못된 요청입니다"});
     }
+  });
+
+
+groupRouter.route('/:groupId')
+  .delete(async (req, res, next) => { // 그룹 삭제
+    const groupId = Number(req.params.groupId); 
+    const password = req.body.password; // 유저가 입력한 비밀번호
+
+    const findGroup = await prisma.password.findUnique({
+      where: {
+        groupId: groupId,
+      },
+    });
+
+    const realPassword = findGroup.password;// 원래 비밀번호 
+  
+    if (password === realPassword) {
+      await prisma.group.delete({
+        where: {
+          id: groupId,
+        },
+      });
+      res.status(200).send({ message: "그룹 삭제 성공"});
+    } else {
+      res.status(403).send({ message: "비밀번호 오류"});
+    }
+    
   });
 
 export default groupRouter;

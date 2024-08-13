@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Group {
-  id           String    @id @default(uuid())
+  id           Int       @id @default(autoincrement())
   name         String
   imageUrl     String
   isPublic     Boolean
@@ -28,7 +28,7 @@ model Group {
 
 model Password {
   id       Int    @id @default(autoincrement())
-  group    Group @relation(fields: [groupId], references: [id])
-  groupId  String @unique
+  group    Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId  Int    @unique
   password String
 }
