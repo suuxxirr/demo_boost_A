@@ -7,11 +7,19 @@ const groupRouter = express.Router();
 
 groupRouter.route('/')
   .post(async (req, res, next) => { // 그룹 등록 
-    const password = req.body.password; // 비밀 번호 저장 => 다른 비밀번호 모델에 저장하기?
-    delete req.body.password;
+    const {password, ...groupFields} = req.body;
+  
     const group = await prisma.group.create({
-      data: req.body,
+      data: groupFields,
     });
+
+    const passworRecord = await prisma.password.create({
+      data: {
+        groupId: group.id, // 그룹 id 가져오기 
+        password: password,
+      },
+    })
+
     if (group) {
       res.status(201).send(group); 
     } else {

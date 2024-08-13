@@ -14,13 +14,21 @@ datasource db {
 }
 
 model Group {
-  id           Int      @id @default(autoincrement())
+  id           String    @id @default(uuid())
   name         String
   imageUrl     String
   isPublic     Boolean
-  likeCount    Int      @default(0)
-  badges       Json     @default("[]")
-  postCount    Int      @default(0)
-  createdAt    DateTime @default(now())
+  likeCount    Int       @default(0)
+  badges       Json      @default("[]")
+  postCount    Int       @default(0)
+  createdAt    DateTime  @default(now())
   introduction String
+  password     Password?
+}
+
+model Password {
+  id       Int    @id @default(autoincrement())
+  group    Group @relation(fields: [groupId], references: [id])
+  groupId  String @unique
+  password String
 }
