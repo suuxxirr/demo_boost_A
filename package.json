@@ -11,5 +11,8 @@
   "scripts": {
     "dev": "nodemon boostBackend/app.js",
     "start": "node boostBackend/app.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }

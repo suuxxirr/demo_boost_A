@@ -1,8 +1,13 @@
-GET http://localhost:3000/test 
-
-###
-
 POST http://localhost:3000/api/groups
+Content-Type: application/json
+
+{
+	"name": "철수",
+	"password": "string",
+	"imageUrl": "string",
+	"isPublic": true,
+	"introduction": "string"
+}
 
 ### 
 

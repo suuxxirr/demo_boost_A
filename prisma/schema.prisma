@@ -18,8 +18,9 @@ model Group {
   name         String
   imageUrl     String
   isPublic     Boolean
-  likeCount    Int
-  postCount    Int
+  likeCount    Int      @default(0)
+  badges       Json     @default("[]")
+  postCount    Int      @default(0)
   createdAt    DateTime @default(now())
   introduction String
 }
