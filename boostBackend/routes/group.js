@@ -33,11 +33,19 @@ groupRouter.route('/:groupId')
     const groupId = Number(req.params.groupId); 
     const password = req.body.password; // 유저가 입력한 비밀번호
 
+    if (isNaN(groupId) || !password) {
+      return res.status(400).send({ message: "잘못된 요청입니다" });
+    }
+
     const findGroup = await prisma.password.findUnique({
       where: {
         groupId: groupId,
       },
     });
+
+    if (!findGroup) {
+      res.status(404).send({ message: "존재하지 않습니다" });
+    }
 
     const realPassword = findGroup.password;// 원래 비밀번호 
   
@@ -49,7 +57,7 @@ groupRouter.route('/:groupId')
       });
       res.status(200).send({ message: "그룹 삭제 성공"});
     } else {
-      res.status(403).send({ message: "비밀번호 오류"});
+      res.status(403).send({ message: "비밀번호가 틀렸습니다"});
     }
     
   });
