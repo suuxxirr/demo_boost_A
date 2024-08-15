@@ -2,8 +2,8 @@ POST http://localhost:3000/api/groups
 Content-Type: application/json
 
 {
-	"name": "Group B",
-	"password": "groupbPassword",
+	"name": "영희네 그룹",
+	"password": "younghee",
 	"imageUrl": "string",
 	"isPublic": true,
 	"introduction": "string"
@@ -11,13 +11,25 @@ Content-Type: application/json
 
 ### 
 
-DELETE http://localhost:3000/api/groups/12
+DELETE http://localhost:3000/api/groups/20
 Content-Type: application/json
 
 {
 	"password": "groupaPassword"
 }
 
+###
+
+PUT http://localhost:3000/api/groups/15
+Content-Type: application/json
+
+{
+	"name": "영희's group",
+	"password": "younghee",
+	"imageUrl": "string",
+	"isPublic": true,
+	"introduction": "string"
+}
 
 
 
