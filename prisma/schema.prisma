@@ -19,11 +19,12 @@ model Group {
   imageUrl     String
   isPublic     Boolean
   likeCount    Int       @default(0)
-  badges       Json      @default("[]")
+  badges       Badges[] 
   postCount    Int       @default(0)
   createdAt    DateTime  @default(now())
   introduction String
   password     Password?
+  badgeCount Int @default(0)
 }
 
 model Password {
@@ -31,4 +32,11 @@ model Password {
   group    Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId  Int    @unique
   password String
+}
+
+model Badges {
+  id Int @id @default(autoincrement())
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  badge String 
+  groupId Int 
 }

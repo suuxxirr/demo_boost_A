@@ -9,12 +9,12 @@ groupRouter.use(express.json());
 groupRouter.route('/')
   .post(async (req, res, next) => { // 그룹 등록 
     const {password, ...groupFields} = req.body;
-  
     const group = await prisma.group.create({
-      data: groupFields,
+      data: groupFields
     });
+    group.badges = [];
 
-    const passworRecord = await prisma.password.create({
+    await prisma.password.create({
       data: {
         groupId: group.id,  
         password: password,
@@ -92,10 +92,82 @@ groupRouter.route('/:groupId')
           introduction,
          },
       });
+
+      // badges 가져오기
+      const badges = await prisma.badges.findMany({
+        where: { groupId },
+      });
+      const badgeList = badges.map(badge => badge.badge);
+
+      group.badges = badgeList;
       res.status(200).send(group);
     } else {
       res.status(403).send({ message: "비밀번호가 틀렸습니다"});
     }
+  });
+
+groupRouter.route('/')
+  .get(async (req, res) => { // 그룹 목록 조회
+    const { page, pageSize, sortBy, keyword, isPublic } = req.query;
+    const take = Number(pageSize);
+    const skip = (Number(page)-1) * take;
+
+    let orderBy;
+    switch(sortBy){
+      case 'latest':
+        orderBy = { createdAt: 'desc' };
+        break;
+      case 'mostPosted':
+        orderBy = { postCount: 'desc' };
+        break;
+      case 'mostLiked':
+        orderBy = { likeCount: 'desc' };
+        break;
+      case 'mostBadge':
+        orderBy = { badgeCount: 'desc' };
+        break;
+      default:
+        orderBy = { createdAt: 'desc' };
+    }
+    const groups = await prisma.group.findMany({
+      where: {
+        name: keyword ? {
+          contains: keyword,
+        } : undefined,
+        isPublic: Boolean(isPublic),
+      },
+      skip,
+      take,
+      orderBy,
+    });
+
+    /*
+    for (let i = 0; i < take; i++){ // badgeCount 붙이기 
+      let groupId = groups[i].id;
+      const badgeCount = await prisma.badges.count({
+        where: { groupId },
+      });
+      groups[i].badgeCount = badgeCount;
+    }
+    */
+  
+    const totalItemCount = await prisma.group.count({
+      where: {
+        name: keyword ? {
+          contains: keyword,
+        } : undefined,
+        isPublic: Boolean(isPublic),
+      }
+    });
+
+    const totalPages = Math.ceil(totalItemCount / take);
+
+    res.status(200).json({
+      currentPage: Number(page),
+      totalPages,
+      totalItemCount,
+      data: groups,
+    });
   });
 
 export default groupRouter;

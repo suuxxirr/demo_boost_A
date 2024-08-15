@@ -1,9 +1,16 @@
+GET http://localhost:3000/api/groups/?page=1&pageSize=3&sortBy=mostLiked&isPublic=true
+
+// api/groups/{page}/{pageSize}/{sortBy}/{keyword}/{isPublic}
+//  latest | mostPosted | mostLiked |  mostBadge
+
+###
+
 POST http://localhost:3000/api/groups
 Content-Type: application/json
 
 {
-	"name": "영희네 그룹",
-	"password": "younghee",
+	"name": "지원이네 그룹",
+	"password": "jeewon",
 	"imageUrl": "string",
 	"isPublic": true,
 	"introduction": "string"
@@ -11,11 +18,11 @@ Content-Type: application/json
 
 ### 
 
-DELETE http://localhost:3000/api/groups/20
+DELETE http://localhost:3000/api/groups/19
 Content-Type: application/json
 
 {
-	"password": "groupaPassword"
+	"password": "jeewon"
 }
 
 ###
@@ -30,6 +37,8 @@ Content-Type: application/json
 	"isPublic": true,
 	"introduction": "string"
 }
+
+
 
 
 
