@@ -209,5 +209,21 @@ groupRouter.route('/:groupId/like')
     }
   });
 
+groupRouter.route('/:groupId/is-public')
+  .get(async (req, res) => { // 그룹 공개 여부 확인 
+    const groupId = Number(req.params.groupId);
+
+    const getGroup = await prisma.group.findUnique({
+      where: {
+        id: groupId,
+      },
+    });
+
+    res.status(200).send({
+      id: groupId,
+      isPublic: getGroup.isPublic,
+    });
+  });
+
 
 export default groupRouter;
