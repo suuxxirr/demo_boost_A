@@ -38,6 +38,19 @@ Content-Type: application/json
 	"introduction": "string"
 }
 
+###
+// 그룹 조회 권한 확인
+POST http://localhost:3000/api/groups/16/verify-password
+Content-Type: application/json
+
+{
+	"password": "chaeyeon"
+}
+
+###
+// 그룹 공감하기
+PATCH http://localhost:3000/api/groups/16/like
+
 
 
 

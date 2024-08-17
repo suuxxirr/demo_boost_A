@@ -26,6 +26,68 @@ groupRouter.route('/')
     } else {
       res.status(400).send({ message: "잘못된 요청입니다"});
     }
+  })
+  .get(async (req, res) => { // 그룹 목록 조회
+    const { page, pageSize, sortBy, keyword, isPublic } = req.query;
+    const take = Number(pageSize);
+    const skip = (Number(page)-1) * take;
+
+    let orderBy;
+    switch(sortBy){
+      case 'latest':
+        orderBy = { createdAt: 'desc' };
+        break;
+      case 'mostPosted':
+        orderBy = { postCount: 'desc' };
+        break;
+      case 'mostLiked':
+        orderBy = { likeCount: 'desc' };
+        break;
+      case 'mostBadge':
+        orderBy = { badgeCount: 'desc' };
+        break;
+      default:
+        orderBy = { createdAt: 'desc' };
+    }
+    const groups = await prisma.group.findMany({
+      where: {
+        name: keyword ? {
+          contains: keyword,
+        } : undefined,
+        isPublic: Boolean(isPublic),
+      },
+      skip,
+      take,
+      orderBy,
+    });
+
+    /*
+    for (let i = 0; i < take; i++){ // badgeCount 붙이기 
+      let groupId = groups[i].id;
+      const badgeCount = await prisma.badges.count({
+        where: { groupId },
+      });
+      groups[i].badgeCount = badgeCount;
+    }
+    */
+  
+    const totalItemCount = await prisma.group.count({
+      where: {
+        name: keyword ? {
+          contains: keyword,
+        } : undefined,
+        isPublic: Boolean(isPublic),
+      }
+    });
+
+    const totalPages = Math.ceil(totalItemCount / take);
+
+    res.status(200).json({
+      currentPage: Number(page),
+      totalPages,
+      totalItemCount,
+      data: groups,
+    });
   });
 
 
@@ -106,68 +168,46 @@ groupRouter.route('/:groupId')
     }
   });
 
-groupRouter.route('/')
-  .get(async (req, res) => { // 그룹 목록 조회
-    const { page, pageSize, sortBy, keyword, isPublic } = req.query;
-    const take = Number(pageSize);
-    const skip = (Number(page)-1) * take;
+groupRouter.route('/:groupId/verify-password')
+  .post(async (req, res) => { // 그룹 조회 권한 확인
+    const groupId = Number(req.params.groupId); 
+    const password = req.body.password;
 
-    let orderBy;
-    switch(sortBy){
-      case 'latest':
-        orderBy = { createdAt: 'desc' };
-        break;
-      case 'mostPosted':
-        orderBy = { postCount: 'desc' };
-        break;
-      case 'mostLiked':
-        orderBy = { likeCount: 'desc' };
-        break;
-      case 'mostBadge':
-        orderBy = { badgeCount: 'desc' };
-        break;
-      default:
-        orderBy = { createdAt: 'desc' };
-    }
-    const groups = await prisma.group.findMany({
+    const findGroup = await prisma.password.findUnique({
       where: {
-        name: keyword ? {
-          contains: keyword,
-        } : undefined,
-        isPublic: Boolean(isPublic),
+        groupId,
       },
-      skip,
-      take,
-      orderBy,
     });
 
-    /*
-    for (let i = 0; i < take; i++){ // badgeCount 붙이기 
-      let groupId = groups[i].id;
-      const badgeCount = await prisma.badges.count({
-        where: { groupId },
-      });
-      groups[i].badgeCount = badgeCount;
+    const realPassword = findGroup.password;
+    if (realPassword === password) {
+      res.status(200).send({ message: "비밀번호가 확인되었습니다"});
+    } else {
+      res.status(401).send({ message: "비밀번호가 틀렸습니다"});
     }
-    */
-  
-    const totalItemCount = await prisma.group.count({
-      where: {
-        name: keyword ? {
-          contains: keyword,
-        } : undefined,
-        isPublic: Boolean(isPublic),
-      }
-    });
-
-    const totalPages = Math.ceil(totalItemCount / take);
-
-    res.status(200).json({
-      currentPage: Number(page),
-      totalPages,
-      totalItemCount,
-      data: groups,
-    });
   });
+
+groupRouter.route('/:groupId/like')
+  .post(async (req, res) => { // 그룹 공감하기
+    const groupId = Number(req.params.groupId); 
+
+    const updatedGroup = await prisma.group.update({
+      where: {
+        id: groupId,
+      },
+      data: {
+        likeCount: {
+          increment: 1,
+        },
+      },
+    })
+
+    if (!updatedGroup) {
+      res.status(404).send({ message: "존재하지 않습니다"});
+    } else {
+      res.status(200).send({ message: "그룹 공감하기 성공"});
+    }
+  });
+
 
 export default groupRouter;
