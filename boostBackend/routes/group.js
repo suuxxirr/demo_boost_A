@@ -166,6 +166,26 @@ groupRouter.route('/:groupId')
     } else {
       res.status(403).send({ message: "비밀번호가 틀렸습니다"});
     }
+  })
+  .get(async (req, res) => { // 그룹 상세 정보 조회 
+    const groupId = Number(req.params.groupId); 
+
+    if (!groupId || isNaN(groupId)) {
+      res.status(400).send({ message: "잘못된 요청입니다" });
+    }
+    const findGroup = await prisma.group.findUnique({
+      where: {
+        id: groupId,
+      },
+    });
+
+    const badges = await prisma.badges.findMany({
+      where: { groupId },
+    });
+    const badgeList = badges.map(badge => badge.badge);
+    findGroup.badges = badgeList;
+
+    res.status(200).send(findGroup);
   });
 
 groupRouter.route('/:groupId/verify-password')
