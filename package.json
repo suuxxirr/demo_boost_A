@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "@prisma/client": "^5.18.0",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4",
+    "prisma": "^5.18.0"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon boostBackend/app.js",
+    "start": "node boostBackend/app.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  }
+}
