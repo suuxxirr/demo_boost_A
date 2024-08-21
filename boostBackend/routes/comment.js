@@ -7,7 +7,7 @@ const commentRouter = express.Router();
 commentRouter.use(express.json());
 
 // 댓글 등록
-commentRouter.post('/api/posts/:postId/comments', async (req, res) => {
+commentRouter.post('/api/posts/:postId/comment', async (req, res) => {
     const { nickname, content, password } = req.body;
     const postId = Number(req.params.postId);
 
@@ -32,7 +32,7 @@ commentRouter.post('/api/posts/:postId/comments', async (req, res) => {
 });
 
 // 댓글 목록 조회
-commentRouter.get('/api/posts/:postId/comments', async (req, res) => {
+commentRouter.get('/api/posts/:postId/comment', async (req, res) => {
     const postId = Number(req.params.postId);
 
     if (isNaN(postId)) {
@@ -57,7 +57,7 @@ commentRouter.get('/api/posts/:postId/comments', async (req, res) => {
 });
 
 // 댓글 수정
-commentRouter.put('/api/comments/:commentId', async (req, res) => {
+commentRouter.put('/api/comment/:commentId', async (req, res) => {
     const commentId = Number(req.params.commentId);
     const { content, password } = req.body;
 
@@ -92,7 +92,7 @@ commentRouter.put('/api/comments/:commentId', async (req, res) => {
 });
 
 // 댓글 삭제
-commentRouter.delete('/api/comments/:commentId', async (req, res) => {
+commentRouter.delete('/api/comment/:commentId', async (req, res) => {
     const commentId = Number(req.params.commentId);
     const { password } = req.body;
 
