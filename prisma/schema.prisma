@@ -35,10 +35,14 @@ model Password {
 }
 
 model Badges {
-  id Int @id @default(autoincrement())
-  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  badge String 
-  groupId Int 
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  groupId     Int
+  group       Group    @relation(fields: [groupId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([groupId])
 }
 
 model Post {
