@@ -61,15 +61,6 @@ groupRouter.route('/')
       orderBy,
     });
 
-    /*
-    for (let i = 0; i < take; i++){ // badgeCount 붙이기 
-      let groupId = groups[i].id;
-      const badgeCount = await prisma.badges.count({
-        where: { groupId },
-      });
-      groups[i].badgeCount = badgeCount;
-    }
-    */
   
     const totalItemCount = await prisma.group.count({
       where: {
