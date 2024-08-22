@@ -46,20 +46,20 @@ model Badges {
 }
 
 model Post {
-  id         Int      @id @default(autoincrement())
-  nickname   String
-  title      String
-  imageUrl   String
-  content    String
-  tags       String
-  location   String
-  moment     DateTime
-  isPublic   Boolean
-  password   String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  likes      Int      @default(0)
-  comments   Comment[]
+  id        Int      @id @default(autoincrement())
+  nickname  String
+  title     String
+  imageUrl  String?
+  content   String
+  tags      String?
+  location  String?
+  moment    DateTime
+  isPublic  Boolean  @default(true)
+  password  String
+  likes     Int      @default(0)
+  createdAt DateTime @default(now())
+  groupId   Int
+  group     Group    @relation(fields: [groupId], references: [id])
 }
 
 model Comment {

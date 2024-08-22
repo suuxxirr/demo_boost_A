@@ -6,7 +6,8 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 // 게시물 등록
-router.post('/', async (req, res) => {
+router.post('/groups/:groupId/posts', async (req, res) => {
+  const { groupId } = req.params;
   const { nickname, title, imageUrl, content, tags, location, moment, isPublic, password } = req.body;
 
   if (!password) return res.status(400).send('Password is required');
@@ -25,6 +26,7 @@ router.post('/', async (req, res) => {
         moment: new Date(moment),
         isPublic,
         password: hashedPassword,
+        groupId: Number(groupId),
       },
     });
     res.status(201).json({ id: post.id });
@@ -34,7 +36,7 @@ router.post('/', async (req, res) => {
 });
 
 // 게시물 수정
-router.put('/:id', async (req, res) => {
+router.put('/posts/:id', async (req, res) => {
   const { id } = req.params;
   const { nickname, title, imageUrl, content, tags, location, moment, isPublic, password } = req.body;
 
@@ -68,7 +70,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // 게시물 삭제
-router.delete('/:id', async (req, res) => {
+router.delete('/posts/:id', async (req, res) => {
   const { id } = req.params;
   const { password } = req.body;
 
@@ -90,9 +92,10 @@ router.delete('/:id', async (req, res) => {
 });
 
 // 게시글 목록 조회
-router.get('/', async (req, res) => {
+router.get('/groups/:groupId/posts', async (req, res) => {
+  const { groupId } = req.params;
   const { isPublic, sortBy, search, tags } = req.query;
-  const where = {};
+  const where = { groupId: Number(groupId) };
 
   if (isPublic) where.isPublic = isPublic === 'true';
   if (search) {
@@ -121,7 +124,7 @@ router.get('/', async (req, res) => {
 });
 
 // 게시글 상세 조회
-router.get('/:id', async (req, res) => {
+router.get('/posts/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -136,8 +139,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// 공감 보내기
-router.post('/:id/like', async (req, res) => {
+// 공감 보내기 (게시물 좋아요)
+router.post('/posts/:id/like', async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -152,7 +155,7 @@ router.post('/:id/like', async (req, res) => {
 });
 
 // 댓글 목록 조회
-router.get('/:id/comments', async (req, res) => {
+router.get('/posts/:id/comments', async (req, res) => {
   const { id } = req.params;
 
   try {
