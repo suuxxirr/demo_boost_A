@@ -25,6 +25,7 @@ model Group {
   introduction String
   password     Password?
   badgeCount Int @default(0)
+  post        Post[]
 }
 
 model Password {
@@ -60,6 +61,7 @@ model Post {
   createdAt DateTime @default(now())
   groupId   Int
   group     Group    @relation(fields: [groupId], references: [id])
+  comment   Comment[]
 }
 
 model Comment {
