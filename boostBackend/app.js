@@ -9,7 +9,7 @@ const app = express();
 
 // CORS 설정
 app.use(cors({
-  origin: '*',
+  origin: 'http://localhost:5173',
   methods: 'GET,POST,PUT,DELETE',
   allowedHeaders: 'Content-Type,Authorization',
   credentials: true,
@@ -22,7 +22,7 @@ app.options('*', cors());
 
 app.use('/api/groups', groupRouter);
 app.use('/api/posts', postRouter); 
-app.use('/api/comment', commentRouter);
-app.use('/api/badge', badgeRouter);
+app.use('/api/comments', commentRouter);
+app.use('/api/badges', badgeRouter);
 
 app.listen(3000, () => console.log('server started'));
