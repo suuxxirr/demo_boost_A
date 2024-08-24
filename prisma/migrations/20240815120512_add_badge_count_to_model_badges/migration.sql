@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `badges` ADD COLUMN `badgeCount` INTEGER NOT NULL DEFAULT 0;

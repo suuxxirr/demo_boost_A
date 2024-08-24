@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient(); 
 
 const groupRouter = express.Router();
-groupRouter.use(express.json());
+// groupRouter.use(express.json());
 
 groupRouter.route('/')
   .post(async (req, res, next) => { // 그룹 등록 
