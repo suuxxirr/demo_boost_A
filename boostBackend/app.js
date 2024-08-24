@@ -6,8 +6,19 @@ import badgeRouter from './routes/badge.js';
 import cors from 'cors';
 
 const app = express();
-app.use(cors());
+
+// CORS 설정
+app.use(cors({
+  origin: '*',
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type,Authorization',
+  credentials: true,
+}));
+
 app.use(express.json());
+
+// CORS preflight 요청 허용
+app.options('*', cors());
 
 app.use('/api/groups', groupRouter);
 app.use('/api/posts', postRouter); 
