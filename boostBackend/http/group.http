@@ -1,12 +1,12 @@
 // 그룹 목록 조회
-GET http://localhost:3000/api/groups/?page=1&pageSize=3&sortBy=mostLiked&isPublic=true
+GET https://demo-boost-a.onrender.com/api/groups/?page=1&pageSize=3&sortBy=mostLiked&isPublic=true
 
 // api/groups/{page}/{pageSize}/{sortBy}/{keyword}/{isPublic}
 //  latest | mostPosted | mostLiked |  mostBadge
 
 ###
 // 그룹 등록 
-POST http://localhost:3000/api/groups
+POST https://demo-boost-a.onrender.com/api/groups
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 
 ### 
 // 그룹 삭제 
-DELETE http://localhost:3000/api/groups/19
+DELETE https://demo-boost-a.onrender.com/api/groups/19
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ Content-Type: application/json
 
 ###
 // 그룹 수정 
-PUT http://localhost:3000/api/groups/15
+PUT https://demo-boost-a.onrender.com/api/groups/15
 Content-Type: application/json
 
 {
@@ -41,7 +41,7 @@ Content-Type: application/json
 
 ###
 // 그룹 조회 권한 확인
-POST http://localhost:3000/api/groups/16/verify-password
+POST https://demo-boost-a.onrender.com/api/groups/16/verify-password
 Content-Type: application/json
 
 {
@@ -50,15 +50,15 @@ Content-Type: application/json
 
 ###
 // 그룹 공감하기
-POST http://localhost:3000/api/groups/16/like
+POST https://demo-boost-a.onrender.com/api/groups/16/like
 
 ### 
 // 그룹 공개 여부 확인
-GET http://localhost:3000/api/groups/16/is-public
+GET https://demo-boost-a.onrender.com/api/groups/16/is-public
 
 ### 
 // 그룹 상세 정보 조회
-GET http://localhost:3000/api/groups/15
+GET https://demo-boost-a.onrender.com/api/groups/15
 
 
 
