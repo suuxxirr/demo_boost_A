@@ -25,4 +25,8 @@ app.use('/api/posts', postRouter);
 app.use('/api/comments', commentRouter);
 app.use('/api/badges', badgeRouter);
 
-app.listen(3000, () => console.log('server started'));
+app.get('/', (req, res) => {
+  res.send('test');
+});
+
+app.listen(process.env.PORT || 3000, () => console.log('server started'));
